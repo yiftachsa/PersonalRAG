@@ -1,21 +1,24 @@
 import os
+import sys
 from dotenv import load_dotenv, find_dotenv
 
 from huggingface_hub import login
 from openai import OpenAI
 
+from config import settings
 from DataLayer.data_module import init_date_dir, get_prev_date_dir, save_dict, get_prev_files_details, list_files, \
     get_changed_files
 from DataLayer.data_process import load_docs_chunks
 from LLMUtils.vector_store import create_vector_store, load_and_update_vector_store, get_retriever
 from LLMUtils.RAG import conversation_chain
+from typing import Optional
 
 
 def init_env():
     try:
         _ = load_dotenv(find_dotenv())
-        client = OpenAI()
-        login(os.getenv('HF_TOKEN'))
+        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        login(token=settings.HF_TOKEN)
         return client
     except Exception as e:
         print(e)
@@ -69,21 +72,47 @@ def query_loop(conv_retrieval_chain):
             print(f"An error occurred: {str(e)}")
 
 
-def main(*args, **kwargs):
+def main(source_path, version: Optional[str] = None):
+    if source_path is None:
+        raise ValueError("Must provide source path")
+    version = version or settings.DEFAULT_VERSION
+
     # TODO: add try catch to delete curr version if process fails in the middle.
-    data_path, conv_retrieval_chain = initialize(version=kwargs["version"], source_path=kwargs["source_path"])
+    data_path, conv_retrieval_chain = initialize(version=version, source_path=source_path)
+
+    # Start the query loop
+    query_loop(conv_retrieval_chain)  # TODO: return metrics
 
     # Save details
     details = {
-        "version": kwargs["version"],
-        "source_path": kwargs["source_path"],
-    }
-    save_dict(details, fr"{data_path}\version_details")
+        # Version and Paths
+        "version": version,
+        "source_path": source_path,
+        "data_path": data_path,
 
-    # Start the query loop
-    query_loop(conv_retrieval_chain)
+        # Model Configurations
+        "embedding_model": settings.EMBEDDING_MODEL,
+        "llm_model": settings.LLM_MODEL,
+
+        # System Information
+        "platform": os.name,
+        "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+
+        # Processing Information
+        "num_source_files": len(list_files(source_path)),
+
+        # # Performance Metrics (to be updated during processing)
+        # "processing_metrics": {
+        #     "documents_processed": 0,
+        #     "chunks_generated": 0,
+        #     "processing_time_seconds": 0
+        # }
+    }
+    details.update(
+        {k.lower(): v for k, v in settings.model_dump().items() if not k.endswith("_KEY") and not k.endswith("_TOKEN")})
+    save_dict(details, fr"{data_path}\version_details")
 
 
 if __name__ == "__main__":
     source = r"D:\Documents\Studies\Documents for higher education\עבודה\Projects\Coursera\LangChain\2 - LangChain Chat with Your Data"
-    main(version="1.0", source_path=source)
+    main(version="1.1", source_path=source)
