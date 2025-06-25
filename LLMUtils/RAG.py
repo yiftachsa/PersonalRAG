@@ -3,8 +3,10 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain.prompts import PromptTemplate
 
+from config import settings
 
-def get_llm(model_name="gpt-3.5-turbo", temp=0):
+
+def get_llm(model_name=settings.LLM_MODEL, temp=settings.LLM_TEMP):
     """
     Initialize OpenAI Chat LLM model
 
@@ -42,7 +44,7 @@ def conversation_chain(retriever, llm=None):
     return conv_retrieval_chain
 
 
-def retrieval_qa(retriever, chain_type="stuff", llm=None):
+def retrieval_qa(retriever, chain_type=settings.CHAIN_TYPE, llm=None):
     if llm is None:
         llm = get_llm()
     retrieval_chain = RetrievalQA.from_chain_type(
@@ -55,7 +57,7 @@ def retrieval_qa(retriever, chain_type="stuff", llm=None):
     return retrieval_chain
 
 
-def prompted_retrieval_qa(retriever, chain_type="stuff", llm=None):
+def prompted_retrieval_qa(retriever, chain_type=settings.CHAIN_TYPE, llm=None):
     if llm is None:
         llm = get_llm()
 

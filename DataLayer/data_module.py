@@ -1,10 +1,9 @@
 from datetime import datetime
 import json
 import os
-
 import time
 
-ROOT_PATH = r"C:\Users\Yifta\Documents\Projects Experiments\personalRAG"  # "D:\\DataSets"
+from config import settings
 
 
 # def create_dir(dir_path):
@@ -29,7 +28,7 @@ def init_date_dir(version):
     :return: the path of the new experiment directory
     """
     time_now = datetime.now().strftime('%H-%M_%d-%m-%Y')
-    path = rf"{ROOT_PATH}\v_{version}\{time_now}"
+    path = rf"{settings.DATA_DIR}\v_{version}\{time_now}"
     os.makedirs(path, exist_ok=False)
     return path
 
@@ -43,7 +42,7 @@ def get_prev_date_dir(version):
     :param version: The version of the experiment.
     :return: The path of the latest date directory. None if no directory is found.
     """
-    path = rf"{ROOT_PATH}\v_{version}"
+    path = rf"{settings.DATA_DIR}\v_{version}"
 
     latest_dir_path = None
     latest_time = None
