@@ -26,15 +26,15 @@ def initialize(version, source_path):
     # maybe add an 'override' flag to delete the version content and re-create it
 
     # Load previous data - if exists
-    prev_data_path = get_prev_date_dir("version")
+    prev_data_path = get_prev_date_dir(version)
     prev_files_details = get_prev_files_details(prev_data_path=prev_data_path, new_source_path=source_path)
 
     # Init
     open_ai_client = init_env()
-    curr_date_dir = init_date_dir("version")
+    curr_date_dir = init_date_dir(version)
 
     # Process data
-    source_files_details = list_files("source_path", save_path=fr"{curr_date_dir}\files_details")
+    source_files_details = list_files(source_path, save_path=fr"{curr_date_dir}\files_details")
     changed_files = get_changed_files(source_files_details, prev_files_details=prev_files_details)
     docs_chunks = load_docs_chunks(changed_files)  # NOTE: save the chunks?
 
@@ -59,17 +59,18 @@ def query_loop(conv_retrieval_chain):
         query = input("\nQuestion: ")
         if query.lower() == 'exit':
             break
-            
+
         try:
             # Pass the query to the conversation chain
             result = conv_retrieval_chain.invoke({"question": query, "chat_history": []})
             print("\nAnswer:", result["answer"])
-            
+
         except Exception as e:
             print(f"An error occurred: {str(e)}")
 
 
 def main(*args, **kwargs):
+    # TODO: add try catch to delete curr version if process fails in the middle.
     data_path, conv_retrieval_chain = initialize(version=kwargs["version"], source_path=kwargs["source_path"])
 
     # Save details
@@ -77,8 +78,8 @@ def main(*args, **kwargs):
         "version": kwargs["version"],
         "source_path": kwargs["source_path"],
     }
-    save_dict(fr"{data_path}\version_details", details)
-    
+    save_dict(details, fr"{data_path}\version_details")
+
     # Start the query loop
     query_loop(conv_retrieval_chain)
 

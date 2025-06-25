@@ -1,8 +1,9 @@
 import os
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
-
-from compression import get_compression_retriever
+# from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
+# from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
+from LLMUtils.compression import get_compression_retriever
 
 
 def get_embedding_model():
@@ -43,7 +44,9 @@ def load_and_update_vector_store(path, new_docs):
     :return: updated vector store
     """
     vector_store = load_vector_store(path)
-    update_vector_store(vector_store, new_docs)
+    if len(new_docs) > 0:
+        update_vector_store(vector_store,
+                            new_docs)  # TODO: Delete ('forget) old documents versions before update. Can be done using changed_files and iterating with vector_store.delete()
     return vector_store
 
 

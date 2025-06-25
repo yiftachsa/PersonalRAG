@@ -28,7 +28,7 @@ def init_date_dir(version):
     :param version: the version of the experiment.
     :return: the path of the new experiment directory
     """
-    time_now = datetime.now().strftime('%H:%M_%d-%m-%Y')
+    time_now = datetime.now().strftime('%H-%M_%d-%m-%Y')
     path = rf"{ROOT_PATH}\v_{version}\{time_now}"
     os.makedirs(path, exist_ok=False)
     return path
@@ -37,8 +37,9 @@ def init_date_dir(version):
 def get_prev_date_dir(version):
     """
     Scan the ROOT_PATH directory for the latest date directory.
-    The directory name is the date in the format '%H:%M_%d-%m-%Y'.
+    The directory name is the date in the format '%H-%M_%d-%m-%Y'.
     If no directory is found in the root directory, return None.
+
     :param version: The version of the experiment.
     :return: The path of the latest date directory. None if no directory is found.
     """
@@ -46,8 +47,10 @@ def get_prev_date_dir(version):
 
     latest_dir_path = None
     latest_time = None
+    if not os.path.exists(path):
+        return None
     for dir_name in os.listdir(path):
-        dir_time = datetime.strptime(dir_name, '%H:%M_%d-%m-%Y')
+        dir_time = datetime.strptime(dir_name, '%H-%M_%d-%m-%Y')
         if latest_time is None or dir_time > latest_time:
             latest_time = dir_time
             latest_dir_path = os.path.join(path, dir_name)

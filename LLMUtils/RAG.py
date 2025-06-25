@@ -1,6 +1,5 @@
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain.prompts import PromptTemplate
 

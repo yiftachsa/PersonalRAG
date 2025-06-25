@@ -1,7 +1,7 @@
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter, TokenTextSplitter
-from langchain.document_loaders import CSVLoader
-
-from docling_utils import DOCLING_FILE_TYPES, docling_load
+# from langchain.document_loaders import CSVLoader
+from langchain_community.document_loaders import CSVLoader
+from DataLayer.docling_utils import DOCLING_FILE_TYPES, docling_load
 
 
 def create_text_splitter(splitter_type: str = None, **kwargs):
@@ -32,13 +32,48 @@ def create_text_splitter(splitter_type: str = None, **kwargs):
 
 def load_csv(csv_file_path):
     """
-    # Load a CSV file and return a list of documents by row (dicts containing page_content and metadata).
-    # :param csv_file_path: The path to the CSV file.
-    # :return: A list of documents (dicts containing page_content and metadata).
+    Load a CSV file and return a list of documents by row (dicts containing page_content and metadata).
+    
+    :param csv_file_path: The path to the CSV file. Can contain non-ASCII characters.
+    :return: A list of documents (dicts containing page_content and metadata).
     """
-    csv_loader = CSVLoader(file_path=csv_file_path)
-    csv_docs = csv_loader.load()
-    return csv_docs
+    try:
+        csv_loader = CSVLoader(
+            file_path=csv_file_path,
+            encoding='utf-8',
+        )
+        return csv_loader.load()
+    except Exception as e:
+        try:
+            csv_loader = CSVLoader(
+                file_path=csv_file_path,
+                encoding='utf-8',
+                csv_args={
+                    'encoding': 'utf-8',
+                    'errors': 'replace'  # Replace invalid characters instead of raising an error
+                }
+            )
+            return csv_loader.load()
+        except Exception as e:
+            # If UTF-8 fails, try with UTF-8-sig (handles BOM)
+            try:
+                csv_loader = CSVLoader(
+                    file_path=csv_file_path,
+                    encoding='utf-8-sig',
+                    csv_args={'encoding': 'utf-8-sig'}
+                )
+                return csv_loader.load()
+            except Exception as e:
+                # If all else fails, try with the system default encoding
+                try:
+                    csv_loader = CSVLoader(
+                        file_path=csv_file_path,
+                        encoding=None,  # Use system default
+                        csv_args={'errors': 'replace'}
+                    )
+                    return csv_loader.load()
+                except Exception as final_error:
+                    raise RuntimeError(f"Failed to load CSV file {csv_file_path}. Error: {str(final_error)}")
 
 
 def filter_by_extension(files_paths, extensions=None):
@@ -67,7 +102,12 @@ def load_docs_chunks(files_paths, docling_files_types=DOCLING_FILE_TYPES, verbos
     if verbose:
         print("loaded using Docling: ", filtered_files_docling)
     csv_files = filter_by_extension(files_paths, extensions=[".csv"])
-    csv_docs = load_csv(csv_files)
-    if verbose:
-        print("loaded using CSV: ", csv_files)
+    csv_docs = []
+    for csv_file in csv_files:
+        try:
+            csv_docs += load_csv(csv_file)
+        except Exception as e:
+            print(f"Failed to load CSV file {csv_file}. Error: {str(e)}")
+    # csv_docs = [load_csv(csv_file) for csv_file in csv_files] #TODO: Handle errors
+    # csv_docs = [doc for sublist in csv_docs for doc in sublist]
     return [*docling_docs, *csv_docs]

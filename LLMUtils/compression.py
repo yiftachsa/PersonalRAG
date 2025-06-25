@@ -1,7 +1,7 @@
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
-from langchain.llms import OpenAI as langchainLLMsOpenAI
-
+# from langchain.llms import OpenAI as langchainLLMsOpenAI
+from langchain_community.llms import OpenAI as langchainLLMsOpenAI
 
 # Wrap our vectorstore
 def get_compression_retriever(base_retriever):
