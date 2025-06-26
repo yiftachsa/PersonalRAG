@@ -104,7 +104,7 @@ def save_dict(dict_to_save, path):
     :param path: destination path.
     """
     with open(f"{path}.json", "w") as f:
-        json.dump(dict_to_save, f)
+        json.dump(dict_to_save, f, indent=4)
 
 
 def load_dict(path):

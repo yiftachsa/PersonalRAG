@@ -115,4 +115,5 @@ def main(source_path, version: Optional[str] = None):
 
 if __name__ == "__main__":
     source = r"D:\Documents\Studies\Documents for higher education\עבודה\Projects\Coursera\LangChain\2 - LangChain Chat with Your Data"
-    main(version="1.1", source_path=source)
+    # source = r"D:\Documents\Studies\Documents for higher education\Courses\Year 4 Semester 2"
+    main(version="1.2", source_path=source)
