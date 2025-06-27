@@ -1,4 +1,4 @@
-# Personal RAG (Retrieval-Augmented Generation) System
+ # Personal RAG (Retrieval-Augmented Generation) System
 
 A sophisticated chatbot system that can process, index, and retrieve information from various document sources to provide accurate and context-aware responses to user queries.
 
@@ -18,63 +18,86 @@ A sophisticated chatbot system that can process, index, and retrieve information
    cd PersonalRAG
    ```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate  # On Windows
-   # or
-   source .venv/bin/activate  # On Unix or MacOS
-   ```
-
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables:
-   - Copy `.env.example` to `.env`
-   - Update the environment variables with your API keys and configurations
-
-## 🏃‍♂️ Quick Start
-
-1. Prepare your documents in a directory of your choice
-2. Run the main application by specifying the source directory path:
-   ```bash
-   python -m Main.main --source_path "path/to/your/documents" --version "1.0"
+3. Set up environment variables:
+   Create a `.env` file in the project root with:
    ```
-   Example:
-   ```bash
-   python -m Main.main --source_path "D:/Documents/MyDocuments" --version "1.0"
+   OPENAI_API_KEY=your_openai_api_key
+   HF_TOKEN=your_huggingface_token
    ```
-3. Interact with the chatbot through the command-line interface
 
-## 🏗️ Project Structure
+## Quick Start
+
+1. Run the application:
+   ```bash
+   python -m Main
+   ```
+
+2. Follow the interactive menu to:
+   - Initialize a new document version
+   - Start querying your documents
+   - Manage conversations
+   - Update your document collection
+
+## Usage Guide
+
+### 1. Initialize a New Version
+
+1. Select "Initialize new version" from the main menu
+2. Enter a version name (e.g., "research_papers")
+3. Provide the path to your document directory
+
+### 2. Start a New Conversation
+
+1. Select "Start new conversation"
+2. Choose a version to query
+3. Begin asking questions about your documents
+
+### 3. Update Documents
+
+1. Select "Update vector store"
+2. Choose the version to update
+3. The system will process any changed files
+
+### 4. Continue Previous Conversations
+
+1. Select "Continue conversation"
+2. Choose a version and conversation
+3. Pick up where you left off
+
+## Project Structure
 
 ```
 PersonalRAG/
-├── DataLayer/           # Data processing and management
-│   ├── data_module.py   # Core data handling
-│   └── data_process.py  # Document processing utilities
-├── LLMUtils/           # LLM-related functionality
-│   ├── RAG.py          # RAG implementation
-│   ├── compression.py   # Text compression utilities
-│   └── vector_store.py  # Vector storage and retrieval
-├── Main/               # Main application entry points
-│   └── main.py         # Main application script
-├── .env                # Environment variables
-└── README.md           # This file
+├── Main/                      # Main application package
+│   ├── __init__.py
+│   ├── __main__.py           # Application entry point
+│   ├── app.py                # Core application logic
+│   ├── menu.py               # Interactive menu system
+│   ├── conversation_manager.py  # Conversation management
+│   └── vector_store_manager.py  # Vector store operations
+├── DataLayer/                # Data processing modules
+│   ├── data_module.py        # File operations
+│   └── data_process.py       # Document processing
+├── LLMUtils/                 # LLM and RAG utilities
+│   ├── RAG.py                # RAG pipeline
+│   └── vector_store.py       # Vector store operations
+├── config.py                 # Configuration settings
+└── requirements.txt          # Python dependencies
 ```
 
-## 🤖 Usage
+## Configuration
 
-### Loading Documents
-Specify the path to your documents directory when running the application. The system will process all supported file formats in the specified directory and its subdirectories.
+Edit `config.py` to customize:
+- Default model parameters
+- File paths
+- Chunking and embedding settings
 
-Supported formats include:
-- PDF documents (.pdf)
-- Word documents (.docx)
-- PowerPoint presentations (.pptx)
-- CSV files (.csv)
+## Troubleshooting
 
 ### Querying the System
 Interact with the system through the command line:
@@ -98,10 +121,8 @@ Interact with the system through the command line:
 ## 📚 Dependencies
 
 - Python 3.8+
-- PyTorch
-- Transformers
 - LangChain
-- FAISS (for vector storage)
+- Chroma (for vector storage)
 - Other dependencies listed in `requirements.txt`
 
 ## 🤝 Contributing

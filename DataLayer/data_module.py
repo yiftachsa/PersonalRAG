@@ -6,53 +6,51 @@ import time
 from config import settings
 
 
-# def create_dir(dir_path):
-#     """
-#     Checks if a directory exists. If not, create it.
-#     If it does exist raises an exception.
-#
-#     Args:
-#       dir_path (str): The path to the directory.
-#     """
-#     if not os.path.exists(dir_path):
-#         print(f"{dir_path} does not exist - creating it")
-#         os.makedirs(dir_path)
-#     else:
-#         raise Exception(f"{dir_path} already exists")
+def create_dir(dir_path):
+    """
+    Checks if a directory exists. If not, create it.
+    If it does exist, raises an exception.
+
+    Args:
+      dir_path (str): The path to the directory.
+    """
+    if not os.path.exists(dir_path):
+        print(f"{dir_path} does not exist - creating it")
+        os.makedirs(dir_path, exist_ok=False)
+    else:
+        raise Exception(f"{dir_path} already exists")
 
 
-def init_date_dir(version):
+def init_date_dir(version_path):
     """
     initialize a new experiment directory and return its path
-    :param version: the version of the experiment.
+    :param version_path: the version of the experiment.
     :return: the path of the new experiment directory
     """
     time_now = datetime.now().strftime('%H-%M_%d-%m-%Y')
-    path = rf"{settings.DATA_DIR}\v_{version}\{time_now}"
+    path = rf"{version_path}\{time_now}"
     os.makedirs(path, exist_ok=False)
     return path
 
 
-def get_prev_date_dir(version):
+def get_prev_date_dir(version_path):
     """
     Scan the ROOT_PATH directory for the latest date directory.
     The directory name is the date in the format '%H-%M_%d-%m-%Y'.
     If no directory is found in the root directory, return None.
 
-    :param version: The version of the experiment.
+    :param version_path: the version of the experiment.
     :return: The path of the latest date directory. None if no directory is found.
     """
-    path = rf"{settings.DATA_DIR}\v_{version}"
-
     latest_dir_path = None
     latest_time = None
-    if not os.path.exists(path):
+    if not os.path.exists(version_path):
         return None
-    for dir_name in os.listdir(path):
+    for dir_name in os.listdir(version_path):
         dir_time = datetime.strptime(dir_name, '%H-%M_%d-%m-%Y')
         if latest_time is None or dir_time > latest_time:
             latest_time = dir_time
-            latest_dir_path = os.path.join(path, dir_name)
+            latest_dir_path = os.path.join(version_path, dir_name)
     return latest_dir_path
 
 

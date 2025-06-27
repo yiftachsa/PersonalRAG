@@ -62,7 +62,6 @@ def create_vector_store(save_path, docs):
     :return: vector store
     """
     embedding_model = get_embedding_model()
-    os.makedirs(save_path, exist_ok=False)
 
     vector_store = Chroma.from_documents(
         documents=docs,

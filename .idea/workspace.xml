@@ -4,11 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af02cc74-6a18-4e89-b68c-9abad0ed9408" name="Changes" comment="Added extensive readme.md file and adapted the code to incorporate config settings class.">
+    <list default="true" id="af02cc74-6a18-4e89-b68c-9abad0ed9408" name="Changes" comment="Minor changes. Added tqdm to docling load.">
+      <change afterPath="$PROJECT_DIR$/Main/Utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OOP/conversation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OOP/manager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OOP/vector_store.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OOP/version.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataLayer/data_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLayer/data_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataLayer/docling_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLayer/docling_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLMUtils/RAG.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLMUtils/RAG.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLMUtils/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLMUtils/vectorstore.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,28 +57,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.config.executor": "Run",
-    "Python.data_module.executor": "Debug",
-    "Python.data_process.executor": "Debug",
-    "Python.docling_utils.executor": "Run",
-    "Python.main.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "simple-web-app",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Yifta/PycharmProjects/PersonalRAG",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.data_module.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.data_process.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.docling_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;simple-web-app&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yifta/PycharmProjects/PersonalRAG&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Yifta\PycharmProjects\PersonalRAG" />
@@ -94,7 +102,8 @@
       <updated>1750769229560</updated>
       <workItem from="1750769230709" duration="14749000" />
       <workItem from="1750837536511" duration="11073000" />
-      <workItem from="1750852436600" duration="7165000" />
+      <workItem from="1750852436600" duration="12090000" />
+      <workItem from="1750929693830" duration="30018000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -128,7 +137,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750835482347</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Minor changes. Added tqdm to docling load.">
+      <option name="closed" value="true" />
+      <created>1750923957587</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750923957587</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,7 +179,8 @@
     <MESSAGE value="Gitignore update" />
     <MESSAGE value="Added project files" />
     <MESSAGE value="Fix minor issues. Based working version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix minor issues. Based working version" />
+    <MESSAGE value="Minor changes. Added tqdm to docling load." />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor changes. Added tqdm to docling load." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -181,6 +199,10 @@
           <url>file://$PROJECT_DIR$/DataLayer/docling_utils.py</url>
           <line>81</line>
           <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/LLMUtils/RAG.py</url>
+          <option name="timeStamp" value="36" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

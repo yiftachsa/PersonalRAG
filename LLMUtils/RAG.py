@@ -1,7 +1,12 @@
+from langchain.chains.summarize import load_summarize_chain
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
+from langchain.memory.chat_message_histories import ChatMessageHistory
+from langchain.docstore.document import Document
 from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain.prompts import PromptTemplate
+from langchain.schema import messages_to_dict, messages_from_dict
+import json
 
 from config import settings
 
@@ -18,7 +23,16 @@ def get_llm(model_name=settings.LLM_MODEL, temp=settings.LLM_TEMP):
     return llm
 
 
-def conversation_chain(retriever, llm=None):
+def summarize(text):
+    llm = get_llm()
+    sum_chain = load_summarize_chain(llm, chain_type="stuff", max_tokens=50)
+    docs = [Document(page_content=text)]
+    summary = sum_chain.run(docs)
+
+    return summary
+
+
+def conversation_chain(retriever, llm=None, memory_load_path=None):
     """
     Create a conversational retrieval chain using the given LLM and retriever.
     Conversational Retrieval Chain uses memory to keep track of the conversation history.
@@ -29,10 +43,20 @@ def conversation_chain(retriever, llm=None):
     """
     if llm is None:
         llm = get_llm()
-    memory = ConversationBufferMemory(
-        memory_key="chat_history",
-        return_messages=True
-    )
+    if memory_load_path is not None:
+        messages = load_messages_from_file(memory_load_path)
+        chat_history = ChatMessageHistory(messages=messages)
+
+        memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            return_messages=True,
+            chat_memory=chat_history
+        )
+    else:
+        memory = ConversationBufferMemory(
+            memory_key="chat_history",
+            return_messages=True
+        )
 
     conv_retrieval_chain = ConversationalRetrievalChain.from_llm(
         llm,
@@ -42,6 +66,21 @@ def conversation_chain(retriever, llm=None):
         # return_generated_question=True,
     )
     return conv_retrieval_chain
+
+
+def save_memory_to_file(conv_retrieval_chain, save_path):
+    memory = conv_retrieval_chain.memory
+    messages = memory.chat_memory.messages
+    serializable = messages_to_dict(messages)
+    with open(fr"{save_path}\"memory.json", "w") as f:
+        json.dump(serializable, f)
+
+
+def load_messages_from_file(load_path):
+    with open(fr"{load_path}\"memory.json", "r") as f:
+        serializable = json.load(f)
+    messages = messages_from_dict(serializable)
+    return messages
 
 
 def retrieval_qa(retriever, chain_type=settings.CHAIN_TYPE, llm=None):
