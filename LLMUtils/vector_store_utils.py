@@ -1,15 +1,16 @@
-import os
-# from langchain.embeddings import OpenAIEmbeddings
-# from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_openai import OpenAIEmbeddings
 
-# from langchain.vectorstores import Chroma
 from langchain_community.vectorstores import Chroma
 from LLMUtils.compression import get_compression_retriever
 from config import settings
 
 
 def get_embedding_model():
+    """
+    Get the embedding model for the vector store based on the settings
+
+    :return: the embedding model
+    """
     embedding_model = OpenAIEmbeddings(model=settings.EMBEDDING_MODEL)
     return embedding_model
 
@@ -62,18 +63,25 @@ def create_vector_store(save_path, docs):
     :return: vector store
     """
     embedding_model = get_embedding_model()
-    os.makedirs(save_path, exist_ok=False)
 
     vector_store = Chroma.from_documents(
         documents=docs,
         embedding=embedding_model,
         persist_directory=save_path
     )
-    vector_store.persist()
+    # vector_store.persist()
     return vector_store
 
 
 def get_retriever(vector_store, search_type=settings.SEARCH_TYPE, compress=settings.COMPRESS_QUERY):
+    """
+    Get a retriever from a vector store based on the settings.
+
+    :param vector_store: vector store to get retriever from
+    :param search_type: type of search to perform (default: settings.SEARCH_TYPE)
+    :param compress: whether to compress retrieved documents (default: settings.COMPRESS_QUERY)
+    :return: retriever
+    """
     retriever = vector_store.as_retriever(search_type=search_type)  # NOTE: OR SelfQueryRetriever
 
     if compress:

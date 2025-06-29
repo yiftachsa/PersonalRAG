@@ -3,6 +3,7 @@ from docling_core.transforms.chunker.tokenizer.openai import OpenAITokenizer
 from langchain_docling import DoclingLoader
 from langchain_docling.loader import ExportType
 import tiktoken
+from tqdm import tqdm
 
 DOCLING_FILE_TYPES = ["pdf", ".docx", ".pptx"]
 
@@ -62,12 +63,20 @@ def docling_load(file_paths, export_type=ExportType.DOC_CHUNKS, model_name="gpt-
         print("No Chunker will be used")
         chunker = None
 
-    loader = DoclingLoader(  # https://python.langchain.com/docs/integrations/document_loaders/docling/
-        file_path=file_paths,
-        export_type=export_type,
-        chunker=chunker,
-    )
-    docs = loader.load()
+    # loader = DoclingLoader(  # https://python.langchain.com/docs/integrations/document_loaders/docling/
+    #     file_path=file_paths,
+    #     export_type=export_type,
+    #     chunker=chunker,
+    # )
+    # docs = loader.load()
+    docs = []
+    for file_path in tqdm(file_paths, desc="Loading documents"):
+        loader = DoclingLoader(
+            file_path=[file_path],
+            export_type=export_type,
+            chunker=chunker
+        )
+        docs.extend(loader.load())
 
     # Note: Use both chunker and splitter for splitting with overlaps of the semantically chunked paragraphs, which can be long.
     if text_splitter is not None:

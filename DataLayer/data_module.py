@@ -6,53 +6,65 @@ import time
 from config import settings
 
 
-# def create_dir(dir_path):
-#     """
-#     Checks if a directory exists. If not, create it.
-#     If it does exist raises an exception.
-#
-#     Args:
-#       dir_path (str): The path to the directory.
-#     """
-#     if not os.path.exists(dir_path):
-#         print(f"{dir_path} does not exist - creating it")
-#         os.makedirs(dir_path)
-#     else:
-#         raise Exception(f"{dir_path} already exists")
+def create_dir(dir_path):
+    """
+    Checks if a directory exists. If not, create it.
+    If it does exist, raises an exception.
+
+    Args:
+      dir_path (str): The path to the directory.
+    """
+    if not os.path.exists(dir_path):
+        print(f"{dir_path} does not exist - creating it")
+        os.makedirs(dir_path, exist_ok=False)
+    else:
+        raise Exception(f"{dir_path} already exists")
 
 
-def init_date_dir(version):
+def init_date_dir(version_path):
     """
     initialize a new experiment directory and return its path
-    :param version: the version of the experiment.
+    :param version_path: the version of the experiment.
     :return: the path of the new experiment directory
     """
     time_now = datetime.now().strftime('%H-%M_%d-%m-%Y')
-    path = rf"{settings.DATA_DIR}\v_{version}\{time_now}"
+    path = rf"{version_path}\{time_now}"
     os.makedirs(path, exist_ok=False)
     return path
 
 
-def get_prev_date_dir(version):
+def delete_date_dir(date_path):
+    """
+    delete the experiment directory and all its contents and subdirectories
+    :param date_path: the path of the experiment directory
+    """
+    if os.path.exists(date_path):
+        for root, dirs, files in os.walk(date_path, topdown=False):
+            for file in files:
+                os.remove(os.path.join(root, file))
+            for dir in dirs:
+                os.rmdir(os.path.join(root, dir))
+        os.rmdir(date_path)
+
+
+def get_prev_date_dir(version_path):
     """
     Scan the ROOT_PATH directory for the latest date directory.
     The directory name is the date in the format '%H-%M_%d-%m-%Y'.
     If no directory is found in the root directory, return None.
 
-    :param version: The version of the experiment.
+    :param version_path: the version of the experiment.
     :return: The path of the latest date directory. None if no directory is found.
     """
-    path = rf"{settings.DATA_DIR}\v_{version}"
-
     latest_dir_path = None
     latest_time = None
-    if not os.path.exists(path):
+    if not os.path.exists(version_path):
         return None
-    for dir_name in os.listdir(path):
+    for dir_name in os.listdir(version_path):
         dir_time = datetime.strptime(dir_name, '%H-%M_%d-%m-%Y')
         if latest_time is None or dir_time > latest_time:
             latest_time = dir_time
-            latest_dir_path = os.path.join(path, dir_name)
+            latest_dir_path = os.path.join(version_path, dir_name)
     return latest_dir_path
 
 
@@ -104,7 +116,7 @@ def save_dict(dict_to_save, path):
     :param path: destination path.
     """
     with open(f"{path}.json", "w") as f:
-        json.dump(dict_to_save, f)
+        json.dump(dict_to_save, f, indent=4)
 
 
 def load_dict(path):
@@ -137,10 +149,26 @@ def get_changed_files(curr_files_details, prev_files_details=None):
             changed_files.append(curr_file_path)
     return changed_files
 
-# files = list_files('/content')
-# print(files)
-# filtered_files = filter_by_extension(files.keys(), extensions=DOCLING_FILE_TYPES)
-# print(filtered_files)
 
-# csv_files = filter_by_extension(files.keys(), extensions=[".csv"])
-# print(csv_files)
+def init_convs(ver_path: str) -> str:
+    """
+    Initialize a directory for storing conversation files.
+    The directory name is 'convs'.
+
+    :param ver_path: path of the version directory.
+    :return: path of the conversation directory.
+    """
+    convs_path = fr"{ver_path}\convs"
+    create_dir(convs_path)
+
+    return convs_path
+
+
+def get_convs_path(ver_path: str) -> str:
+    """
+    Return the path of the conversation directory.
+
+    :param ver_path: path of the version directory.
+    :return: path of the conversation directory.
+    """
+    return fr"{ver_path}\convs"

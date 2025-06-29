@@ -1,6 +1,8 @@
 # Personal RAG (Retrieval-Augmented Generation) System
 
-A sophisticated chatbot system that can process, index, and retrieve information from various document sources to provide accurate and context-aware responses to user queries.
+A sophisticated chatbot system that can process, index, and retrieve information from various document sources to
+provide accurate and context-aware responses to user queries. Built with Python and leveraging state-of-the-art language
+models.
 
 ## 🚀 Features
 
@@ -8,105 +10,174 @@ A sophisticated chatbot system that can process, index, and retrieve information
 - **Vector Storage**: Efficient storage and retrieval of document embeddings
 - **Conversational AI**: Natural language understanding and response generation
 - **Modular Architecture**: Clean separation of concerns between data processing and LLM interactions
-- **Customizable**: Easily configurable for different document sources and LLM backends
+- **Version Control**: Manage different versions of your document collections
+- **Interactive CLI**: User-friendly command-line interface for easy interaction
 
 ## 🛠️ Installation
 
-1. Clone the repository:
+1. **Prerequisites**:
+    - Python 3.8+
+    - pip (Python package manager)
+
+2. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/PersonalRAG.git
    cd PersonalRAG
    ```
 
-2. Create and activate a virtual environment:
+3. Set up a virtual environment (recommended):
    ```bash
+   # Windows
    python -m venv .venv
-   .venv\Scripts\activate  # On Windows
-   # or
-   source .venv/bin/activate  # On Unix or MacOS
+   .venv\Scripts\activate
+   
+   # Unix/MacOS
+   python3 -m venv .venv
+   source .venv/bin/activate
    ```
 
-3. Install dependencies:
+4. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables:
-   - Copy `.env.example` to `.env`
-   - Update the environment variables with your API keys and configurations
-
-## 🏃‍♂️ Quick Start
-
-1. Prepare your documents in a directory of your choice
-2. Run the main application by specifying the source directory path:
+5. Set up environment variables:
+   Copy the example environment file and update it with your credentials:
    ```bash
-   python -m Main.main --source_path "path/to/your/documents" --version "1.0"
+   copy .env.example .env
    ```
-   Example:
-   ```bash
-   python -m Main.main --source_path "D:/Documents/MyDocuments" --version "1.0"
-   ```
-3. Interact with the chatbot through the command-line interface
+   Then edit the `.env` file with your API keys and configurations.
 
-## 🏗️ Project Structure
+## Quick Start
+
+1. Run the application:
+   ```bash
+   python -m Main
+   ```
+
+2. Follow the interactive menu to:
+    - Initialize a new document version
+    - Start querying your documents
+    - Manage conversations
+    - Update your document collection
+
+## Usage Guide
+
+### 1. Initialize a New Version
+
+1. Select "Initialize new version" from the main menu
+2. Enter a version name (e.g., "research_papers")
+3. Provide the path to your document directory
+
+### 2. Start a New Conversation
+
+1. Select "Start new conversation"
+2. Choose a version to query
+3. Begin asking questions about your documents
+
+### 3. Update Documents
+
+1. Select "Update vector store"
+2. Choose the version to update
+3. The system will process any changed files
+
+### 4. Continue Previous Conversations
+
+1. Select "Continue conversation"
+2. Choose a version and conversation
+3. Pick up where you left off
+
+## Project Structure
 
 ```
 PersonalRAG/
-├── DataLayer/           # Data processing and management
-│   ├── data_module.py   # Core data handling
-│   └── data_process.py  # Document processing utilities
-├── LLMUtils/           # LLM-related functionality
-│   ├── RAG.py          # RAG implementation
-│   ├── compression.py   # Text compression utilities
-│   └── vector_store.py  # Vector storage and retrieval
-├── Main/               # Main application entry points
-│   └── main.py         # Main application script
-├── .env                # Environment variables
-└── README.md           # This file
+├── Main/                      # Main application package
+│   ├── __init__.py
+│   ├── app.py                # Core application logic
+│   ├── menu.py               # Interactive menu system
+├── DataLayer/                # Data processing modules
+│   ├── data_module.py        # File operations
+│   ├── docling_utils.py      # Docling utilities
+│   └── data_process.py       # Document processing
+├── LLMUtils/                 # LLM and RAG utilities
+│   ├── rag.py                # RAG pipeline
+│   ├── compression.py        # LLM compression
+│   └── vector_store_utils.py # Vector store operations
+├── core/                     # Core functionality
+│   ├── __init__.py
+│   ├── version.py            # Version management
+│   ├── conversation.py       # Conversation handling
+│   ├── manager.py            # Manage the flow
+│   └── vector_store.py       # Vector store implementations
+├── config.py                 # Configuration settings
+├── requirements.txt          # Python dependencies
+└── .env.example              # Example environment variables
 ```
 
-## 🤖 Usage
+## Core Components
 
-### Loading Documents
-Specify the path to your documents directory when running the application. The system will process all supported file formats in the specified directory and its subdirectories.
+1. **Version Management** (`core/version.py`)
+    - Handles document versioning and tracking
+    - Manages different document collections
 
-Supported formats include:
-- PDF documents (.pdf)
-- Word documents (.docx)
-- PowerPoint presentations (.pptx)
-- CSV files (.csv)
+2. **Conversation System** (`core/conversation.py`)
+    - Manages chat history and context
+    - Handles conversation state and persistence
 
-### Querying the System
-Interact with the system through the command line:
-```
-> What information do you have about [topic]?
-[System will retrieve and generate a response based on the indexed documents]
-```
+3. **Vector Store** (`core/vector_store.py`)
+    - Implements FAISS-based vector storage
+    - Handles document embeddings and similarity search
 
-## ⚙️ Configuration
+4. **Data Layer** (`DataLayer/`)
+    - Processes and prepares documents
+    - Handles file operations and data loading
+
+5. **LLM Utilities** (`LLMUtils/`)
+    - Implements RAG pipeline
+    - Manages language model interactions
+
+## Configuration
+
+### Edit `config.py` to customize:
+
+- Default model parameters
+- File paths and storage locations
+- Chunking and embedding settings
+- Conversation history settings
+
+### Edit `.env`
 
 1. Copy `.env.example` to `.env`
 2. Update the `.env` file with your configuration:
-   - `OPENAI_API_KEY`: Your OpenAI API key
-   - `HF_TOKEN`: Your Hugging Face authentication token
-   - Other model and processing parameters
+    - `OPENAI_API_KEY`: Your OpenAI API key
+    - `HF_TOKEN`: Your Hugging Face authentication token
+    - Other model and processing parameters
+
+## Common Issues
+
+1. **Missing Dependencies**
+   ```bash
+   # If you encounter missing packages:
+   pip install -r requirements.txt
+   ```
+
+2. **Environment Variables**
+    - Ensure `.env` file exists and contains all required variables
+    - Check for typos in variable names
+
+3. **Memory Issues**
+    - Large documents may require more memory
+    - Try reducing chunk size in `config.py`
+
+4. **API Rate Limits**
+    - Check your API key usage and limits
+    - Consider implementing rate limiting if needed
 
 ### Command Line Arguments
+
 - `--source_path` (required): Path to the directory containing your documents
-- `--version` (optional, default="1.0"): Version identifier for the vector store (useful for maintaining different document collections)
-
-## 📚 Dependencies
-
-- Python 3.8+
-- PyTorch
-- Transformers
-- LangChain
-- FAISS (for vector storage)
-- Other dependencies listed in `requirements.txt`
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- `--version` (optional, default="1.0"): Version identifier for the vector store (useful for maintaining different
+  document collections)
 
 ## 📄 License
 
