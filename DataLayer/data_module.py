@@ -33,6 +33,20 @@ def init_date_dir(version_path):
     return path
 
 
+def delete_date_dir(date_path):
+    """
+    delete the experiment directory and all its contents and subdirectories
+    :param date_path: the path of the experiment directory
+    """
+    if os.path.exists(date_path):
+        for root, dirs, files in os.walk(date_path, topdown=False):
+            for file in files:
+                os.remove(os.path.join(root, file))
+            for dir in dirs:
+                os.rmdir(os.path.join(root, dir))
+        os.rmdir(date_path)
+
+
 def get_prev_date_dir(version_path):
     """
     Scan the ROOT_PATH directory for the latest date directory.
@@ -135,10 +149,26 @@ def get_changed_files(curr_files_details, prev_files_details=None):
             changed_files.append(curr_file_path)
     return changed_files
 
-# files = list_files('/content')
-# print(files)
-# filtered_files = filter_by_extension(files.keys(), extensions=DOCLING_FILE_TYPES)
-# print(filtered_files)
 
-# csv_files = filter_by_extension(files.keys(), extensions=[".csv"])
-# print(csv_files)
+def init_convs(ver_path: str) -> str:
+    """
+    Initialize a directory for storing conversation files.
+    The directory name is 'convs'.
+
+    :param ver_path: path of the version directory.
+    :return: path of the conversation directory.
+    """
+    convs_path = fr"{ver_path}\convs"
+    create_dir(convs_path)
+
+    return convs_path
+
+
+def get_convs_path(ver_path: str) -> str:
+    """
+    Return the path of the conversation directory.
+
+    :param ver_path: path of the version directory.
+    :return: path of the conversation directory.
+    """
+    return fr"{ver_path}\convs"

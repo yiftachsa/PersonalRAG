@@ -24,6 +24,12 @@ def get_llm(model_name=settings.LLM_MODEL, temp=settings.LLM_TEMP):
 
 
 def summarize(text):
+    """
+    Summarize given text using a pre-defined summarize chain.
+
+    :param text: text to summarize
+    :return: summary of the text
+    """
     llm = get_llm()
     sum_chain = load_summarize_chain(llm, chain_type="stuff")  # Todo: replace with llm chain ith ptompt template
     docs = [Document(page_content=text)]
@@ -69,6 +75,12 @@ def conversation_chain(retriever, llm=None, memory_load_path=None):
 
 
 def save_memory_to_file(conv_retrieval_chain, save_path):
+    """
+    Save the memory of the given conversational retrieval chain to a file.
+
+    :param conv_retrieval_chain: conversational retrieval chain to save
+    :param save_path: path to save the memory to
+    """
     memory = conv_retrieval_chain.memory
     messages = memory.chat_memory.messages
     serializable = messages_to_dict(messages)
@@ -77,6 +89,12 @@ def save_memory_to_file(conv_retrieval_chain, save_path):
 
 
 def load_messages_from_file(load_path):
+    """
+    Load the memory of a conversational retrieval chain from a file.
+
+    :param load_path: path to load the memory from
+    :return: messages loaded from the file
+    """
     with open(fr"{load_path}\memory.json", "r") as f:
         serializable = json.load(f)
     messages = messages_from_dict(serializable)
@@ -84,6 +102,15 @@ def load_messages_from_file(load_path):
 
 
 def retrieval_qa(retriever, chain_type=settings.CHAIN_TYPE, llm=None):
+    """
+    Create a retrieval QA chain using the given LLM and retriever.
+    Retrieval QA Chain uses the retriever to fetch relevant documents and the LLM to generate an answer.
+
+    :param retriever: retriever to use
+    :param chain_type: which type of chain to use. Defaults to settings.CHAIN_TYPE.
+    :param llm: LLM. Defaults to get_llm()
+    :return: retrieval QA chain
+    """
     if llm is None:
         llm = get_llm()
     retrieval_chain = RetrievalQA.from_chain_type(
@@ -97,6 +124,16 @@ def retrieval_qa(retriever, chain_type=settings.CHAIN_TYPE, llm=None):
 
 
 def prompted_retrieval_qa(retriever, chain_type=settings.CHAIN_TYPE, llm=None):
+    """
+    Create a prompted retrieval QA chain using the given LLM and retriever.
+    Prompts the retriever to generate an answer using the given prompt template.
+    Retrieval QA Chain uses the retriever to fetch relevant documents and the LLM to generate an answer.
+
+    :param retriever: retriever to use
+    :param chain_type: which type of chain to use. Defaults to settings.CHAIN_TYPE.
+    :param llm: LLM. Defaults to get_llm()
+    :return: retrieval QA chain
+    """
     if llm is None:
         llm = get_llm()
 

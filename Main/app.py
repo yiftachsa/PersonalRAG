@@ -1,11 +1,20 @@
-import os
-from typing import Dict, List, Optional
-
 from menu import MenuSystem
-from OOP.manager import Manager
+from core.manager import Manager
 
 
 class PersonalRAGApp:
+    """
+    Main application class for Personal RAG System
+
+    This class contains the main application loop and provides an interface to
+    interact with the system.
+
+    Attributes:
+        manager (Manager): The Manager instance that handles all the operations
+            related to the document store.
+        menu (MenuSystem): The MenuSystem instance that handles the user interface
+            and interactions.
+    """
     def __init__(self):
         self.manager = Manager()
         self.menu = MenuSystem()
@@ -95,13 +104,6 @@ class PersonalRAGApp:
 
     def _handle_continue_conversation(self):
         """Handle continuing an existing conversation"""
-        # versions = self.manager.list_versions()
-        # version_idx = self.menu.get_version_choice(versions, "Select version")
-        #
-        # if version_idx < 0:
-        #     return
-        #
-        # version_name = versions[version_idx]["version"]
         convs = self.manager.list_conversations()
 
         if not convs:

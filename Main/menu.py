@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional, Callable, Any
+from typing import List, Dict
 from dataclasses import dataclass
 import os
 from pprint import pprint
@@ -11,6 +11,18 @@ class MenuItem:
 
 
 class MenuSystem:
+    """
+    Provides an interface to interact with the Personal RAG System.
+
+    This class contains methods to display the main menu, display conversations,
+    handle user input, and start a new conversation.
+
+    Attributes:
+        current_version (str): The currently selected version.
+        current_conv_id (str): The currently selected conversation ID.
+        is_running (bool): Whether the application is still running.
+    """
+
     def __init__(self):
         self.current_version = None
         self.current_conv_id = None
