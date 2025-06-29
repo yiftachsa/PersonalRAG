@@ -1,4 +1,9 @@
-# Personal RAG (Retrieval-Augmented Generation) System
+<div align="center">
+  <img src="Media/logo.jpg" alt="Personal RAG Logo" width="300">
+  
+  # Personal RAG (Retrieval-Augmented Generation) System
+</div>
+
 
 A sophisticated chatbot system that can process, index, and retrieve information from various document sources to
 provide accurate and context-aware responses to user queries. Built with Python and leveraging state-of-the-art language
