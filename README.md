@@ -178,12 +178,6 @@ PersonalRAG/
     - Check your API key usage and limits
     - Consider implementing rate limiting if needed
 
-### Command Line Arguments
-
-- `--source_path` (required): Path to the directory containing your documents
-- `--version` (optional, default="1.0"): Version identifier for the vector store (useful for maintaining different
-  document collections)
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
