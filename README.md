@@ -26,7 +26,7 @@ models.
 
 2. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/PersonalRAG.git
+   git clone https://github.com/yiftachsa/PersonalRAG
    cd PersonalRAG
    ```
 
