@@ -1,4 +1,4 @@
-from menu import MenuSystem
+from .menu import MenuSystem
 from core.manager import Manager
 
 

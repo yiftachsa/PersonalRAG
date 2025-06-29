@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af02cc74-6a18-4e89-b68c-9abad0ed9408" name="Changes" comment="Fix minor issues. Based working version">
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    <list default="true" id="af02cc74-6a18-4e89-b68c-9abad0ed9408" name="Changes" comment="Added logo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataLayer/data_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLayer/data_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LLMUtils/RAG.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLMUtils/RAG.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LLMUtils/compression.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLMUtils/compression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LLMUtils/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLMUtils/vector_store.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +24,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="simple-web-app" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -65,7 +58,7 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Readme-update",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/Yifta/PycharmProjects/PersonalRAG",
     "node.js.detected.package.eslint": "true",
@@ -132,7 +125,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750835482347</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added logo">
+      <option name="closed" value="true" />
+      <created>1751211709352</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1751211709352</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -154,7 +155,8 @@
     <MESSAGE value="Gitignore update" />
     <MESSAGE value="Added project files" />
     <MESSAGE value="Fix minor issues. Based working version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix minor issues. Based working version" />
+    <MESSAGE value="Added logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added logo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -174,7 +176,11 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PersonalRAG$config.coverage" NAME="config Coverage Results" MODIFIED="1750846569017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PersonalRAG$main.coverage" NAME="main Coverage Results" MODIFIED="1750851822570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
+    <SUITE FILE_PATH="coverage/PersonalRAG$manager.coverage" NAME="manager Coverage Results" MODIFIED="1751090041006" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/OOP" />
+    <SUITE FILE_PATH="coverage/PersonalRAG$app.coverage" NAME="app Coverage Results" MODIFIED="1751205390305" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
+    <SUITE FILE_PATH="coverage/PersonalRAG$main.coverage" NAME="main Coverage Results" MODIFIED="1750923779617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
+    <SUITE FILE_PATH="coverage/PersonalRAG$docling_utils.coverage" NAME="docling_utils Coverage Results" MODIFIED="1750922203737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DataLayer" />
+    <SUITE FILE_PATH="coverage/PersonalRAG$conversation.coverage" NAME="conversation Coverage Results" MODIFIED="1751097037134" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/OOP" />
     <SUITE FILE_PATH="coverage/PersonalRAG$data_module.coverage" NAME="data_module Coverage Results" MODIFIED="1750776127864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DataLayer" />
     <SUITE FILE_PATH="coverage/PersonalRAG$data_process.coverage" NAME="data_process Coverage Results" MODIFIED="1750779038633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/DataLayer" />
   </component>

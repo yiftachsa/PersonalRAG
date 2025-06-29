@@ -57,7 +57,7 @@ models.
 
 1. Run the application:
    ```bash
-   python -m Main
+   python -m Main.app
    ```
 
 2. Follow the interactive menu to:
