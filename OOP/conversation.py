@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import json
 import os
 import uuid
@@ -29,16 +29,16 @@ class Conversation:
 
         conv_meta = {
             "id": self.conv_id,
-            "created_at": datetime.now().isoformat(),
+            # "created_at": datetime.now().isoformat(),
             "description": "New conversation",
             # "messages": []
         }
-        # conv_retrieval_chain.memory.save_to_file(self.conv_dir / "memory.json")
-        save_dict(conv_meta, fr"{self.conv_dir}\conv_meta.json")
+        # conv_retrieval_chain.memory.save_to_file(self.conv_dir / memory.json")
+        save_dict(conv_meta, fr"{self.conv_dir}\conv_meta")
         # return self.conv_retrieval_chain
 
     def continue_conversation(self, retriever):
-        self.conv_retrieval_chain = conversation_chain(retriever, memory_load_path=fr"{self.conv_dir}\"memory.json")
+        self.conv_retrieval_chain = conversation_chain(retriever, memory_load_path=self.conv_dir)
 
         # return self.conv_retrieval_chain
 
@@ -63,15 +63,15 @@ class Conversation:
         memory = self.conv_retrieval_chain.memory
         messages = memory.chat_memory.messages
         serializable = messages_to_dict(messages)
-        with open(fr"{self.conv_dir}\"memory.json", "w") as f:
+        with open(fr"{self.conv_dir}\memory.json", "w") as f:
             json.dump(serializable, f)
         return serializable
 
     def _update_conversation_description(self, messages):
-        text_blocks = [msg['data']['content'] for msg in messages]
+        text_blocks = [msg['type'] + ": " + msg['data']['content'] for msg in messages]
         full_text = "\n".join(text_blocks)
 
         description = summarize(full_text)
-        load_conv_meta = load_dict(fr"{self.conv_dir}\conv_meta.json")
+        load_conv_meta = load_dict(fr"{self.conv_dir}\conv_meta")
         load_conv_meta['description'] = description
-        save_dict(load_conv_meta, fr"{self.conv_dir}\conv_meta.json")
+        save_dict(load_conv_meta, fr"{self.conv_dir}\conv_meta")

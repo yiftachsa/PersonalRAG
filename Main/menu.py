@@ -1,71 +1,58 @@
-from typing import List, Dict, Optional, Tuple, Callable, Any
+from typing import List, Dict, Optional, Callable, Any
 from dataclasses import dataclass
 import os
-from pathlib import Path
+from pprint import pprint
 
 
 @dataclass
 class MenuItem:
     number: int
     text: str
-    handler: Callable[[], Any]
-    requires_auth: bool = False
 
 
 class MenuSystem:
-    def __init__(self, rag_app: 'PersonalRAG'):
-        self.rag_app = rag_app
+    def __init__(self):
         self.current_version = None
         self.current_conv_id = None
         self.is_running = True
 
-    def show_menu(self):
-        """Display the main menu and handle user input"""
-        while self.is_running:
-            self._clear_screen()
-            print("\n=== Personal RAG System ===")
+    def show_menu(self) -> int:
+        """Display the main menu and return user's choice"""
+        self._clear_screen()
+        print("\n=== Personal RAG System ===")
 
-            # Main menu items
-            menu_items = [
-                MenuItem(1, "Initialize new version", self._handle_init_version),
-                MenuItem(2, "Start new conversation", self._handle_new_conversation),
-                MenuItem(3, "Update vector store", self._handle_update_vector_store),
-                MenuItem(4, "List conversations", self._handle_list_conversations),
-                MenuItem(5, "Continue conversation", self._handle_continue_conversation),
-                MenuItem(6, "Exit", self._handle_exit)
-            ]
+        menu_items = [
+            MenuItem(1, "Initialize new version"),
+            MenuItem(2, "Start new conversation"),
+            MenuItem(3, "Update vector store"),
+            MenuItem(4, "List conversations"),
+            MenuItem(5, "Continue conversation"),
+            MenuItem(6, "Exit")
+        ]
 
-            # Display menu
-            for item in menu_items:
-                print(f"{item.number}. {item.text}")
+        # Display menu
+        for item in menu_items:
+            print(f"{item.number}. {item.text}")
 
-            # Get user choice
-            try:
-                choice = int(input("\nEnter your choice (1-6): "))
-                selected = next((item for item in menu_items if item.number == choice), None)
-
-                if selected:
-                    selected.handler()
-                else:
-                    print("\nInvalid choice. Please try again.")
-                    input("Press Enter to continue...")
-
-            except ValueError:
-                print("\nPlease enter a valid number.")
-                input("Press Enter to continue...")
-
-    def _clear_screen(self):
-        """Clear the terminal screen"""
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-    def _select_version(self, prompt: str = "Select version") -> Optional[str]:
-        """Helper to select a version from available versions"""
-        versions = [v["version"] for v in self.rag_app.conv_manager.list_versions()]
-
-        if not versions:
-            print("No versions available. Please initialize a version first.")
+        # Get user choice
+        try:
+            choice = int(input("\nEnter your choice (1-6): "))
+            if 1 <= choice <= 6:
+                return choice
+            print("\nPlease enter a number between 1 and 6.")
             input("Press Enter to continue...")
-            return None
+            return 0
+        except ValueError:
+            print("\nPlease enter a valid number.")
+            input("Press Enter to continue...")
+            return 0
+
+    def get_version_choice(self, versions: List[Dict[str, str]], prompt: str) -> int:
+        """Display versions and get user's choice"""
+        if not versions:
+            print("No versions available.")
+            input("Press Enter to continue...")
+            return -1
 
         print(f"\n{prompt}:")
         for i, version in enumerate(versions, 1):
@@ -73,145 +60,68 @@ class MenuSystem:
 
         try:
             choice = int(input("\nEnter number (or 0 to cancel): "))
-            if 1 <= choice <= len(versions):
-                return versions[choice - 1]
-            return None
-        except (ValueError, IndexError):
-            return None
+            if 0 <= choice <= len(versions):
+                return choice - 1  # Return index or -1 for cancel
+            return -1
+        except ValueError:
+            return -1
 
-    def _select_conversation(self, version: str) -> Optional[str]:
-        """Helper to select a conversation from a version"""
-        conversations = self.rag_app.conv_manager.list_conversations(version)
+    def show_convs(self, conversations: List[Dict[str, str]]):
+        """Display all conversations to the user"""
+        print(f"\n=== All Conversations ===")
+        for i, conv in enumerate(conversations, 1):
+            # print(f"{i}: {conv})")
+            pprint(f"{i}: {conv}")
 
+        input("Press Enter to continue...")
+
+    def get_conversation_choice(self, conversations: List[Dict[str, str]]) -> int:
+        """Display conversations and get user's choice"""
         if not conversations:
-            print("No conversations found for this version.")
+            print("No conversations available.")
             input("Press Enter to continue...")
-            return None
+            return -1
 
         print("\nAvailable conversations:")
         for i, conv in enumerate(conversations, 1):
-            print(f"{i}. {conv['description']} ({conv['id'][:8]}...)")
+            pprint(f"{i}: {conv}")
+            # print(f"{i}: {conv})")
 
         try:
             choice = int(input("\nEnter number (or 0 to cancel): "))
-            if 1 <= choice <= len(conversations):
-                return conversations[choice - 1]['id']
-            return None
-        except (ValueError, IndexError):
-            return None
+            if 0 <= choice <= len(conversations):
+                return choice - 1  # Return index or -1 for cancel
+            return -1
+        except ValueError:
+            return -1
 
-    def _handle_init_version(self):
-        """Handle version initialization"""
-        print("\n=== Initialize New Version ===")
-        version = input("Enter version name: ").strip()
-        source_path = input("Enter source documents path: ").strip()
+    def get_input(self, prompt: str, required: bool = True) -> str:
+        """Get input from user with optional validation"""
+        while True:
+            value = input(prompt).strip()
+            if not required or value:
+                return value
+            print("This field is required.")
 
-        if not version or not source_path:
-            print("Version name and source path are required.")
-            input("Press Enter to continue...")
-            return
+    def _clear_screen(self):
+        """Clear the terminal screen"""
+        os.system('cls' if os.name == 'nt' else 'clear')
 
-        try:
-            # Initialize version and create vector store
-            self.rag_app.conv_manager.init_version(version, source_path)
-            self.rag_app.vector_manager.init_vector_store(version, source_path)
+    def show_message(self, message: str):
+        """Display a message to the user"""
+        print(f"\n{message}")
+        input("Press Enter to continue...")
 
-            print(f"\nVersion '{version}' initialized successfully!")
-            self.current_version = version
-            input("Press Enter to continue...")
-
-        except Exception as e:
-            print(f"\nError initializing version: {str(e)}")
-            input("Press Enter to continue...")
-
-    def _handle_new_conversation(self):
-        """Handle starting a new conversation"""
-        version = self._select_version("Select version for new conversation")
-        if not version:
-            return
-
-        try:
-            conv_id, _ = self.rag_app.conv_manager.start_conversation(version)
-            self.current_version = version
-            self.current_conv_id = conv_id
-
-            print(f"\nNew conversation started with ID: {conv_id}")
-            self._chat_loop()
-
-        except Exception as e:
-            print(f"\nError starting conversation: {str(e)}")
-            input("Press Enter to continue...")
-
-    def _handle_update_vector_store(self):
-        """Handle updating vector store"""
-        version = self._select_version("Select version to update")
-        if not version:
-            return
-
-        try:
-            version_meta = self.rag_app.conv_manager.get_version_meta(version)
-            if not version_meta:
-                print("Version metadata not found.")
-                input("Press Enter to continue...")
-                return
-
-            source_path = version_meta["source_path"]
-            if self.rag_app.vector_manager.update_vector_store(version, source_path):
-                print("\nVector store updated successfully!")
-            else:
-                print("\nNo changes detected in source files.")
-
-            input("Press Enter to continue...")
-
-        except Exception as e:
-            print(f"\nError updating vector store: {str(e)}")
-            input("Press Enter to continue...")
-
-    def _handle_list_conversations(self):
-        """Handle listing conversations"""
-        version = self._select_version("Select version to view conversations")
-        if not version:
-            return
-
-        conversations = self.rag_app.conv_manager.list_conversations(version)
-
-        print(f"\n=== Conversations for version '{version}' ===")
-        if not conversations:
-            print("No conversations found.")
-        else:
-            for i, conv in enumerate(conversations, 1):
-                print(f"{i}. {conv['description']} ({conv['id'][:8]}...) - {conv['created_at']}")
-
-        input("\nPress Enter to continue...")
-
-    def _handle_continue_conversation(self):
-        """Handle continuing an existing conversation"""
-        version = self._select_version("Select version")
-        if not version:
-            return
-
-        conv_id = self._select_conversation(version)
-        if not conv_id:
-            return
-
-        self.current_version = version
-        self.current_conv_id = conv_id
-        self._chat_loop()
-
-    def _handle_exit(self):
-        """Handle application exit"""
-        print("\nThank you for using Personal RAG System. Goodbye!")
-        self.is_running = False
-
-    def _chat_loop(self):
-        """Handle the chat interaction loop"""
-        if not self.current_conv_id or not self.current_version:
-            return
-
+    def chat_loop(self, query_callback, history_callback):
+        """Handle the chat interaction loop
+        
+            :param query_callback: A function that takes a user message and returns the AI's response
+            :param history_callback:
+        """
         print("\n=== Chat Mode ===")
         print("Type 'exit' to end the conversation")
-        print("Type 'clear' to clear conversation history")
         print("Type 'history' to view conversation history")
+        print("Type 'back' to return to main menu")
         print("=" * 20)
 
         while True:
@@ -221,39 +131,20 @@ class MenuSystem:
                 if user_input.lower() == 'exit':
                     print("Ending conversation...")
                     break
-                elif user_input.lower() == 'clear':
-                    # Clear conversation history
-                    self.rag_app.conv_manager.clear_conversation(
-                        self.current_version,
-                        self.current_conv_id
-                    )
-                    print("Conversation history cleared")
+                elif user_input.lower() == 'back':
+                    return
                 elif user_input.lower() == 'history':
-                    # Show conversation history
-                    messages = self.rag_app.conv_manager.get_conversation_messages(
-                        self.current_version,
-                        self.current_conv_id
-                    )
-                    print("\n=== Conversation History ===")
-                    for msg in messages:
-                        print(f"{msg['role'].capitalize()}: {msg['content']}")
-                    print("=" * 30)
-                else:
-                    # Process user query
-                    response = self.rag_app.query(
-                        self.current_version,
-                        self.current_conv_id,
-                        user_input
-                    )
-                    print(f"\nAssistant: {response}")
+                    message_history = history_callback()
+                    for message in message_history:
+                        print(f"{message['role'].capitalize()}: {message['content']}")
+                    continue
 
-            except KeyboardInterrupt:
-                print("\nOperation cancelled by user.")
-                break
+                response = query_callback(user_input)
+                print(f"AI: {response}")
             except Exception as e:
-                print(f"\nAn error occurred: {str(e)}")
-                break
+                print(f"Error: {e}")
 
-        # Reset conversation state
-        self.current_conv_id = None
-        input("\nPress Enter to return to main menu...")
+    def _handle_exit(self):
+        """Handle application exit"""
+        print("\nThank you for using Personal RAG System. Goodbye!")
+        self.is_running = False

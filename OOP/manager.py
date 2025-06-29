@@ -1,8 +1,22 @@
 import os
 
+from dotenv import load_dotenv, find_dotenv
+from huggingface_hub import login
+from openai import OpenAI
+
+from OOP.version import Version
 from config import settings
 from DataLayer.data_module import init_date_dir, save_dict, load_dict
-from version import Version
+
+
+def init_env():
+    try:
+        _ = load_dotenv(find_dotenv())
+        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        login(token=settings.HF_TOKEN)
+        return client
+    except Exception as e:
+        print(e)
 
 
 class Manager:
@@ -12,6 +26,7 @@ class Manager:
         # self.current_conv_id = None
         # self.retriever = None
         self.data_dir = settings.DATA_DIR
+        init_env()
 
     def init_version(self, version_num: str, source_path: str) -> str:
         """Initialize a new version with source documents"""
@@ -24,7 +39,7 @@ class Manager:
         if version_num is None and self.current_version is None:
             raise ValueError("No version selected")
         use_current_version_no_arg = version_num is None and self.current_version is not None
-        use_current_version_arg = self.current_version and self.current_version.version_num == version_num
+        use_current_version_arg = self.current_version is not None and self.current_version.version_num == version_num
         if not (use_current_version_no_arg or use_current_version_arg):
             # try to load different conversation #version_num != self.current_version.version_num:
             self.current_version = Version(version_num, self.data_dir)
@@ -67,17 +82,17 @@ class Manager:
             version_path = fr"{self.data_dir}\{version_name}"
             for date in os.listdir(version_path):
                 date_path = fr"{version_path}\{date}"
-                vector_store_meta = load_dict(fr"{date_path}\vector_store_meta.json")
+                vector_store_meta = load_dict(fr"{date_path}\vector_store_meta")
                 source_path = vector_store_meta["source_path"]
 
                 data_dict = {"version": version_name[2:], "source_path": source_path}
                 if include_convs:
                     convs_paths = os.listdir(fr"{date_path}\convs")
                     for conv_path in convs_paths:
-                        conv_meta = load_dict(fr"{convs_paths}\{conv_path}\conv_meta.json")
+                        conv_meta = load_dict(fr"{date_path}\convs\{conv_path}\conv_meta")
                         data_dict["conv_id"] = conv_meta["id"]
                         data_dict["description"] = conv_meta["description"]
-                        data.append(data_dict)
+                data.append(data_dict)
         return data
 
     def list_conversations(self):

@@ -21,7 +21,7 @@ class VectorStore:
         vector_store_meta = {
             "source_path": self.source_path,
         }
-        save_dict(fr"{self.date_path}\vector_store_meta.json", vector_store_meta)
+        save_dict(vector_store_meta, fr"{self.date_path}\vector_store_meta")
 
     def create_vector_store_from_path(self, source_path: str) -> str:
         self.source_path = source_path
@@ -43,7 +43,7 @@ class VectorStore:
 
         changed_files = get_changed_files(source_files_details, prev_files_details=prev_files_details)
         docs = load_docs_chunks(changed_files)
-        
+
         # Create vector store
         self._create_vector_store(docs)
         return self.vector_store_path
@@ -55,7 +55,7 @@ class VectorStore:
         return load_dict(files_details_path)
 
     def load_vector_store(self):
-        self.source_path = load_dict(fr"{self.date_path}\vector_store_meta.json")["source_path"]
+        self.source_path = load_dict(fr"{self.date_path}\vector_store_meta")["source_path"]
 
         self.vector_store_path = fr"{self.date_path}\vector_store"
         self.vector_store = load_vector_store(self.vector_store_path)

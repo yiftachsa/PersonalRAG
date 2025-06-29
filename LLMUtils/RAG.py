@@ -25,7 +25,7 @@ def get_llm(model_name=settings.LLM_MODEL, temp=settings.LLM_TEMP):
 
 def summarize(text):
     llm = get_llm()
-    sum_chain = load_summarize_chain(llm, chain_type="stuff", max_tokens=50)
+    sum_chain = load_summarize_chain(llm, chain_type="stuff")  # Todo: replace with llm chain ith ptompt template
     docs = [Document(page_content=text)]
     summary = sum_chain.run(docs)
 
@@ -72,12 +72,12 @@ def save_memory_to_file(conv_retrieval_chain, save_path):
     memory = conv_retrieval_chain.memory
     messages = memory.chat_memory.messages
     serializable = messages_to_dict(messages)
-    with open(fr"{save_path}\"memory.json", "w") as f:
+    with open(fr"{save_path}\memory.json", "w") as f:
         json.dump(serializable, f)
 
 
 def load_messages_from_file(load_path):
-    with open(fr"{load_path}\"memory.json", "r") as f:
+    with open(fr"{load_path}\memory.json", "r") as f:
         serializable = json.load(f)
     messages = messages_from_dict(serializable)
     return messages

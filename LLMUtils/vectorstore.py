@@ -68,7 +68,7 @@ def create_vector_store(save_path, docs):
         embedding=embedding_model,
         persist_directory=save_path
     )
-    vector_store.persist()
+    # vector_store.persist()
     return vector_store
 
 
